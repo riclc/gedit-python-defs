@@ -89,7 +89,7 @@ def extract_words(p, separators, separators_include, connectors):
 
 
 def format_doc(s, keywords, params):
-    params = extract_words( params[1:-1].strip(), ',', '', '' ) + FIXED_PARAMS
+    params = extract_words( params[1:-1].strip(), ',=', '', '' ) + FIXED_PARAMS
 
     s2 = ""
     for line in s.split('\n'):
