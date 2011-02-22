@@ -40,13 +40,14 @@ def strip_and_get_indent(line):
 
 # ex.: extract_words( s, "", ",:=()", '"' )
 #
-def extract_words(p, separators, separators_include, connectors):
-    if not(' ' in separators_include) and not(' ' in connectors):
-        separators += ' '
-    if not('\t' in separators_include) and not('\t' in connectors):
-        separators += '\t'
-    if not('\n' in separators_include) and not('\n' in connectors):
-        separators += '\n'
+def extract_words(p, separators, separators_include, connectors, add_default=True):
+    if add_default:
+        if not(' ' in separators_include) and not(' ' in connectors):
+            separators += ' '
+        if not('\t' in separators_include) and not('\t' in connectors):
+            separators += '\t'
+        if not('\n' in separators_include) and not('\n' in connectors):
+            separators += '\n'
 
     resp = []
     s = ""
@@ -89,7 +90,13 @@ def extract_words(p, separators, separators_include, connectors):
 
 
 def format_doc(s, keywords, params):
-    params = extract_words( params[1:-1].strip(), ',=', '', '' ) + FIXED_PARAMS
+    params = extract_words( params[1:-1].strip(), \
+        ',=', '', '', add_default=False ) + FIXED_PARAMS
+
+    for i in range( len(params) ):
+        ps = params[i].split(' ')
+        if len(ps) > 1:
+            params[i] = ps[-1]
 
     s2 = ""
     for line in s.split('\n'):
@@ -153,6 +160,11 @@ def parse_items_from_ctags(code, lang):
         if expr[0:2] == '/^': expr = expr[2:]
         if expr[-2:] == '$/': expr = expr[:-2]
         line = int(line[5:])
+
+        expr = expr.replace('\\', '')
+            
+        p1 = expr.find('//')
+        if p1 != -1: expr = expr[:p1]
         
         p1 = expr.find('(')
         p2 = expr.rfind(')')
