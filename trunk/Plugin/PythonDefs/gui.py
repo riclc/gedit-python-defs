@@ -203,7 +203,9 @@ class Gui:
 
 
     def fill_path(self, root_path):
-        self.hboxDir.foreach( lambda btn: self.hboxDir.remove(btn) )
+        self.hboxDir.foreach( lambda btn: self.hboxDir.remove(btn) )        
+        if root_path == None: return
+        
         for d in root_path:
             base_d = os.path.basename(d)
             
