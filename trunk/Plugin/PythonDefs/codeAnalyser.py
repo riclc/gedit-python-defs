@@ -3,10 +3,12 @@
 #
 
 import gtk
+import glib
 import gio
 import os
 from subprocess import Popen, PIPE
 from random import randint
+
 
 
 
@@ -131,7 +133,11 @@ def format_doc_line(line, keywords, params):
 
 
 def parse_items_from_ctags(code, lang):
-    tmp = '/tmp/gedit.%s.python-defs.%d.tmp' % (os.getlogin(), randint(1,5))
+    s = os.getenv('USERNAME')
+    if s == None:
+        s = "user"
+        
+    tmp = '/tmp/gedit.%s.python-defs.%d.tmp' % (s, randint(1,5))
 
     f = open( tmp, 'w' )
     f.write(code)
