@@ -149,7 +149,7 @@ def parse_items_from_ctags(code, lang):
     p.stdin.close()
     resp = p.stdout.read()
     p.stdout.close()
-
+    
     items = []
     for line in resp.split('\n'):
         # ex.: 'func<tab>test 1.c<tab>/^int func()$/;"<tab>function<tab>line:4
@@ -220,10 +220,14 @@ class CodeAnalyser:
     
     
     def from_code(self, code, lang):
-        if lang == 'c' or lang == 'c++':
+        if lang == 'c':
             self.items = parse_items_from_ctags(code, lang)
+        elif lang == 'cpp':
+            self.items = parse_items_from_ctags(code, 'c++')
         elif lang == 'python':
             self.parse_items_from_python_code(code)
+        else:
+            print "PythonDefs: lang = %s" % str(lang)
     
         
     
